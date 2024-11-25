@@ -1,1 +1,239 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+
+// Define pins
+#define DHTPIN 2          
+#define DHTTYPE DHT11     
+#define MOISTURE_PIN A0   
+#define WATER_SENSOR_PIN A1 
+#define RED_LED_PIN 8     
+#define GREEN_LED_PIN 9   
+#define RELAY_PIN 7  
+
+// Initialize sensors
+DHT dht(DHTPIN, DHTTYPE);
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+// Variables
+int waterLevel = 0;              // Variable to store the sensor value
+int maxLevel = 1023;             // Maximum level corresponding to full tank
+int minLevel = 0;                // Minimum level corresponding to empty tank
+int waterPercentage = 0;         // To store water level percentage
+int remainingWaterAmount = 0;    // Track remaining water to pour if tank gets empty mid-process
+float flowRate = 15.0;           // Flow rate of the pump in ml/sec
+unsigned long pumpStartTime;     // To store the time when the pump starts
+bool wateringInProgress = false; // Flag to check if watering is in progress
+
+void setup() {
+  Serial.begin(9600);        
+  dht.begin();               
+  lcd.init();                
+  lcd.backlight();
+
+  pinMode(RED_LED_PIN, OUTPUT);   
+  pinMode(GREEN_LED_PIN, OUTPUT); 
+  pinMode(RELAY_PIN, OUTPUT);  
+
+  lcd.setCursor(0, 0);
+  lcd.print("System Starting...");
+  delay(2000);
+}
+
+void loop() {
+  // Part 1: Check sensor data until watering is needed
+  while (true) {
+    // Step 1: Read environmental sensor data
+    float temp = dht.readTemperature();     
+    float hum = dht.readHumidity();         
+    int moisture = analogRead(MOISTURE_PIN); 
+
+    // Check if readings are valid
+    if (isnan(temp) || isnan(hum)) {
+      lcd.setCursor(0, 0);
+      lcd.print("Sensor Error    ");
+      return;
+    }
+
+    // Display sensor readings
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Temp: ");
+    lcd.print(temp);
+    lcd.print("C");
+
+    lcd.setCursor(0, 1);
+    lcd.print("Hum: ");
+    lcd.print(hum);
+    lcd.print("%");
+    delay(2000);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Soil Moisture:");
+    lcd.setCursor(0, 1);
+    lcd.print(moisture);
+    delay(2000);
+
+    // Step 2: Send data to Raspberry Pi
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Sending to Pi...");
+    Serial.print(temp);
+    Serial.print(",");
+    Serial.print(hum);
+    Serial.print(",");
+    Serial.println(moisture);
+
+    // Wait for Raspberry Pi response
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Waiting for Pi...");
+
+    while (Serial.available() == 0) {
+      // Do nothing, wait for response
+    }
+
+    // Step 3: Receive predicted water amount
+    int wateringAmount = Serial.parseInt();
+    remainingWaterAmount = wateringAmount;
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+
+    if (wateringAmount == 0) {
+      lcd.print("NO WATERING NEEDED");
+      delay(2000);
+      
+      // Part 1: Wait for 1 minute before checking sensors again
+      delay(60000); // 1 minute delay
+      continue; // Go back to the beginning of the loop to check sensor readings again
+    } else {
+      lcd.print("Water Amount:");
+      lcd.setCursor(0, 1);
+      lcd.print(wateringAmount);
+      lcd.print(" ml");
+      delay(2000);
+      break; // Exit the loop if watering is needed
+    }
+  }
+
+  // Step 4: Water tank monitoring
+  waterLevel = analogRead(WATER_SENSOR_PIN);
+  waterPercentage = map(waterLevel, minLevel, maxLevel, 0, 100);
+
+  // LED control based on water level
+  if (waterPercentage <= 20) {
+    digitalWrite(RED_LED_PIN, HIGH);   
+    digitalWrite(GREEN_LED_PIN, LOW);  
+  } else if (waterPercentage >= 60) {
+    digitalWrite(RED_LED_PIN, LOW);    
+    digitalWrite(GREEN_LED_PIN, HIGH); 
+  } else {
+    digitalWrite(RED_LED_PIN, LOW);    
+    digitalWrite(GREEN_LED_PIN, LOW);
+  }
+
+  // Handle empty tank scenario - Pause if tank is empty, resume only after full refill
+  if (waterPercentage <= 10) {
+    Serial.println("Tank is empty. Please refill the tank fully.");
+    lcd.clear();
+    lcd.print("Tank Empty");
+    lcd.setCursor(0, 1);
+    lcd.print("Refill Required");
+
+    digitalWrite(RELAY_PIN, LOW);  
+    wateringInProgress = false;
+
+    // Wait for the tank to be fully refilled (water level >= 90%)
+    while (waterPercentage < 90) {
+      waterLevel = analogRead(WATER_SENSOR_PIN);
+      waterPercentage = map(waterLevel, minLevel, maxLevel, 0, 100);
+      delay(1000);
+    }
+
+    Serial.println("Tank fully refilled. Continuing process...");
+    lcd.clear();
+    lcd.print("Tank Refilled!");
+    delay(2000);
+  }
+
+  // Step 5: Start watering if needed
+  if (waterPercentage > 10 && remainingWaterAmount > 0 && !wateringInProgress) {
+    Serial.println("Watering started...");
+    lcd.clear();
+    lcd.print("Watering...");
+    digitalWrite(RELAY_PIN, HIGH);  // Turn on the pump relay
+    pumpStartTime = millis();
+    wateringInProgress = true;
+  }
+
+  // Step 6: Monitor watering progress
+  if (wateringInProgress) {
+    unsigned long elapsedTime = millis() - pumpStartTime;
+    float dispensedAmount = (elapsedTime / 1000.0) * flowRate;
+
+    // If the tank gets empty mid-process
+    if (waterPercentage <= 10) {
+      digitalWrite(RELAY_PIN, LOW);
+      wateringInProgress = false;
+      remainingWaterAmount -= dispensedAmount;
+      Serial.print("Watering paused. Remaining amount: ");
+      Serial.print(remainingWaterAmount);
+      Serial.println(" ml");
+
+      lcd.clear();
+      lcd.print("Watering Paused");
+      lcd.setCursor(0, 1);
+      lcd.print("Tank Empty!");
+      delay(2000);
+    }
+
+    // If required amount has been dispensed
+    if (dispensedAmount >= remainingWaterAmount) {
+      digitalWrite(RELAY_PIN, LOW);
+      remainingWaterAmount = 0;
+      wateringInProgress = false;
+      Serial.println("Watering completed.");
+
+      lcd.clear();
+      lcd.print("Watering Done");
+      delay(2000);
+
+      // Part 2: After 30 seconds, take another sensor reading
+      delay(30000); // Wait 30 seconds
+      int moisture = analogRead(MOISTURE_PIN); 
+      Serial.print("Rechecking moisture level: ");
+      Serial.println(moisture);
+
+      // Send updated data to Raspberry Pi
+      Serial.print(temp);
+      Serial.print(",");
+      Serial.print(hum);
+      Serial.print(",");
+      Serial.println(moisture);
+
+      // Wait for Raspberry Pi response
+      while (Serial.available() == 0) {
+        // Do nothing, wait for response
+      }
+
+      // Receive updated watering amount
+      wateringAmount = Serial.parseInt();
+
+      // If no watering is needed, return to Part 1 (1-minute interval checking)
+      if (wateringAmount == 0) {
+        lcd.clear();
+        lcd.print("NO WATERING NEEDED");
+        delay(2000);
+
+        // Part 1: Return to 1-minute interval checking
+        while (wateringAmount == 0) {
+          delay(60000); // 1 minute delay
+          loop(); // Restart loop to check sensor readings
+        }
+      }
+    }
+  }
+}
 
