@@ -101,22 +101,22 @@ The system automates plant watering, reducing the need for constant monitoring a
 <li><strong>Arduino Libraries:</strong>
 </p>
 <p>
-	<strong>LiquidCrystal:</strong> For controlling the 16x2 LCD display module.
+	1.<strong>LiquidCrystal:</strong> For controlling the 16x2 LCD display module.
 </p>
 <p>
-	<strong>Wire.h:</strong> For I2C communication (if required for the LCD display).
+	2.<strong>Wire.h:</strong> For I2C communication (if required for the LCD display).
 </p>
 <p>
-	<strong>DHT.h:</strong> For interfacing with the DHT11 sensor.
+	3.<strong>DHT.h:</strong> For interfacing with the DHT11 sensor.
 </p>
 <p>
 <li><strong>Dataset Preparation Tools:</strong>
 </p>
 <p>
-	<strong>Excel:</strong> For preparing and organizing the dataset.
+	1.<strong>Excel:</strong> For preparing and organizing the dataset.
 </p>
 <p>
-	<strong>VS Code:</strong> For preprocessing the dataset and implementing the ML model.
+	2.<strong>VS Code:</strong> For preprocessing the dataset and implementing the ML model.
 </p>
 <p>
 
