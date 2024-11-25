@@ -33,8 +33,7 @@ Arduino sends sensor data to Raspberry Pi, receives the predicted water amount, 
 The system automates plant watering, reducing the need for constant monitoring and manual care.
 </p>
 
-<h2>System architecture</h2>
-<p>
+
   
    
 
