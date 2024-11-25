@@ -81,35 +81,34 @@ The system automates plant watering, reducing the need for constant monitoring a
 <li><strong>Machine Learning Libraries:</strong>
 </p>
 <p>
-	  1. pandas: For data manipulation and analysis.
+	1. pandas: For data manipulation and analysis.
 </p>
 <p>
-	  2. numpy: For numerical computations and handling multi-dimensional arrays.
+	2. numpy: For numerical computations and handling multi-dimensional arrays.
 </p>
 <p>
-	  3. matplotlib.pyplot: For data visualization.
+	3. matplotlib.pyplot: For data visualization.
 </p>
 <p>
-	  4. sklearn.model_selection (train_test_split): For splitting the dataset into training and testing sets.
+	4. sklearn.model_selection (train_test_split): For splitting the dataset into training and testing sets.
 </p>
 <p>		  
-
-	  5. sklearn.linear_model (LinearRegression):Implements a linear regression model for predicting the target variable (water amount).
+	5. sklearn.linear_model (LinearRegression): Implements a linear regression model for predicting the target variable (water amount).
 </p>
 <p>
-	  6. sklearn.metrics (mean_absolute_error, mean_squared_error):For evaluating the accuracy and performance of the ML model.
+	6. sklearn.metrics (mean_absolute_error, mean_squared_error):For evaluating the accuracy and performance of the ML model.
 </p>
 <p>	
 <li><strong>Arduino Libraries:</strong>
 </p>
 <p>
-		LiquidCrystal: For controlling the 16x2 LCD display module.
+	LiquidCrystal: For controlling the 16x2 LCD display module.
 </p>
 <p>
-		Wire.h: For I2C communication (if required for the LCD display).
+	Wire.h: For I2C communication (if required for the LCD display).
 </p>
 <p>
-		○ DHT.h: For interfacing with the DHT11 sensor.
+	DHT.h: For interfacing with the DHT11 sensor.
 </p>
 <p>
 <li><strong>Dataset Preparation Tools:</strong>
@@ -118,7 +117,7 @@ The system automates plant watering, reducing the need for constant monitoring a
 	Excel: For preparing and organizing the dataset.
 </p>
 <p>
-	 VS Code: For preprocessing the dataset and implementing the ML model.
+	VS Code: For preprocessing the dataset and implementing the ML model.
 </p>
 <p>
 
