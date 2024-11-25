@@ -60,11 +60,13 @@ The system automates plant watering, reducing the need for constant monitoring a
 <li><strong>Operating System for Raspberry Pi:</strong>
 </p>
 <p>
-	&nbsp;&nbsp;&nbsp;&nbsp;Raspberry pi OS.
+	Raspberry pi OS.
+</p>
+<p>	
 <li><strong>Programming Languages:</strong>
 </p>
 <p>
-		Python: For ML model implementation and Raspberry Pi programming.
+	Python: For ML model implementation and Raspberry Pi programming.
 </p>
 <p>
 		C/C++: For Arduino programming.
