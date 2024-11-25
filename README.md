@@ -13,7 +13,7 @@ The system is designed with Arduino controlling the watering mechanism. Various 
 </p>
 <h2>Features</h2>
 <p>
-  Machine Learning-Based Water Prediction:
+ ** Machine Learning-Based Water Prediction:**
 The system uses a trained ML model on the Raspberry Pi to predict the precise watering amount based on sensor data.
 </p>
 <p>
