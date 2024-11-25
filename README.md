@@ -121,5 +121,3 @@ The system automates plant watering, reducing the need for constant monitoring a
 <p>
 
  
-<h2>Installation and setup</h2>
-<p>
