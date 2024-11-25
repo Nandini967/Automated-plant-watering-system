@@ -60,7 +60,7 @@ The system automates plant watering, reducing the need for constant monitoring a
 <li><strong>Operating System for Raspberry Pi:</strong>
 </p>
 <p>
-<li>Raspberry pi OS.</li>
+	<li>Raspberry pi OS.</li>
 <li><strong>Programming Languages:</strong>
 </p>
 <p>
