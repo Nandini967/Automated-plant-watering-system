@@ -35,6 +35,9 @@ The system automates plant watering, reducing the need for constant monitoring a
 
 <h2>System architecture</h2>
 <p>
+  
+   
+
 <h2>Hardware requirements</h2>
 <p>
 <li><strong>Raspberry Pi</strong> (for running the ML model)
@@ -54,5 +57,39 @@ The system automates plant watering, reducing the need for constant monitoring a
 
 <h2>Software requirements</h2>
 <p>
+<li><strong>Operating System for Raspberry Pi:</strong>
+    ○ Raspberry pi OS.
+<li><strong>Programming Languages:</strong>
+		○ Python: For ML model implementation and Raspberry Pi programming.
+		○ C/C++: For Arduino programming.
+<li><strong>Arduino IDE:</strong>
+		○ For writing, compiling, and uploading code to the Arduino.
+<li><strong>Machine Learning Libraries:</strong>
+	  1. pandas:
+		  ○ For data manipulation and analysis.
+		  ○ Used to handle the dataset efficiently by loading, cleaning, and organizing data.
+	  2. numpy:
+		  ○ For numerical computations and handling multi-dimensional arrays.
+		  ○ Supports mathematical operations on the dataset.
+	  3. matplotlib.pyplot:
+		  ○ For data visualization.
+		  ○ Used to create graphs and plots to understand dataset trends and relationships.
+	  4. sklearn.model_selection (train_test_split):
+		  ○ For splitting the dataset into training and testing sets.
+		  ○ Helps in evaluating the performance of the ML model.
+	  5. sklearn.linear_model (LinearRegression):
+		  ○ Implements a linear regression model for predicting the target variable (water amount).
+	  6. sklearn.metrics (mean_absolute_error, mean_squared_error):
+		  ○ For evaluating the accuracy and performance of the ML model.
+		  ○ Metrics like Mean Absolute Error (MAE) and Mean Squared Error (MSE) are used to measure         prediction errors.
+<li><strong>Arduino Libraries:</strong>
+		○ LiquidCrystal: For controlling the 16x2 LCD display module.
+		○ Wire.h: For I2C communication (if required for the LCD display).
+		○ DHT.h: For interfacing with the DHT11 sensor.
+<li><strong>Dataset Preparation Tools:</strong>
+	• Excel: For preparing and organizing the dataset.
+	• VS Code: For preprocessing the dataset and implementing the ML model.
+
+ 
 <h2>Installation and setup</h2>
 <p>
