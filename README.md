@@ -13,6 +13,26 @@ The system is designed with Arduino controlling the watering mechanism. Various 
 </p>
 <h2>Features</h2>
 <p>
+  Machine Learning-Based Water Prediction:
+The system uses a trained ML model on the Raspberry Pi to predict the precise watering amount based on sensor data.
+</p>
+<p>
+Real-Time Environmental Monitoring:
+Soil moisture, temperature, and humidity are continuously monitored using sensors to provide accurate input for water prediction.
+</p>
+<p>
+Automated Water Dispensing:
+The Arduino controls the water pump to dispense the predicted amount of water, ensuring proper plant hydration.
+</p>
+<p>
+Efficient Sensor Communication:
+Arduino sends sensor data to Raspberry Pi, receives the predicted water amount, and controls the watering process accordingly.
+</p>
+<p>
+Minimal Manual Intervention:
+The system automates plant watering, reducing the need for constant monitoring and manual care.
+</p>
+
 <h2>System architecture</h2>
 <p>
 <h2>Hardware requirements</h2>
