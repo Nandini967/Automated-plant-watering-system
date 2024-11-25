@@ -37,7 +37,22 @@ The system automates plant watering, reducing the need for constant monitoring a
 <p>
 <h2>Hardware requirements</h2>
 <p>
-<h2>Software requirementsh2>
+<li><strong>Raspberry Pi</strong> (for running the ML model)
+<li><strong>Arduino</strong>  (for controlling sensors and the watering mechanism)
+<li><strong>Soil Moisture Sensor</strong>  (to measure soil moisture levels)
+<li><strong>DHT11 Sensor </strong> (to measure temperature and humidity)
+<li><strong>Water Pump </strong> (to dispense water)
+<li><strong>Relay Module</strong>  (to control the water pump)
+<li><strong>Water Level Sensor </strong> (to measure the water level in the tank)
+<li><strong>Water Tank</strong>  (to store water for the system)
+<li><strong>USB Cable</strong>  (for communication between Raspberry Pi and Arduino)
+<li><strong>LED Indicators</strong>  (To alert the system about the water level in the tank red(empty tank) and green (full tank)
+<li><strong>Power Supply or Batteries</strong>  (to power the Arduino, Raspberry Pi, and sensors)
+<li><strong>Connecting Wires and Jumper Cables</strong>  (for circuit connections)
+<li><strong>Breadboard</strong> (for assembling the components)
+<li><strong>16x2 LCD Display Module</strong>  (to display system status and sensor readings)
+
+<h2>Software requirements</h2>
 <p>
 <h2>Installation and setup</h2>
 <p>
