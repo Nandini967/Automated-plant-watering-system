@@ -1,0 +1,40 @@
+import serial
+import joblib
+import time
+import numpy as np
+
+model_filename = 'water_prediction_model.pkl'
+model = joblib.load(model_filename)
+
+serial_port = '/dev/ttyACM0'  
+baud_rate = 9600
+ser = serial.Serial(serial_port, baud_rate, timeout=1)
+
+def predict_watering_amount(temp, hum, soil_moisture):
+    input_data = np.array([[temp, hum, soil_moisture]])
+    watering_amount = model.predict(input_data)[0]
+    return int(watering_amount) if watering_amount > 0 else 0
+
+while True:
+    if ser.in_waiting > 0:
+        arduino_data = ser.readline().decode('utf-8').strip()
+        
+        try:
+            temp, hum, soil_moisture = map(float, arduino_data.split(','))
+            print(f"Received from Arduino -> Temp: {temp} C, Hum: {hum} %, Soil Moisture: {soil_moisture}")
+        except ValueError:
+            print("Invalid data received from Arduino.")
+            continue
+        
+        # Check soil moisture level
+        if soil_moisture >= 800:
+            watering_amount = predict_watering_amount(temp, hum, soil_moisture)
+            print(f"Predicted watering amount: {watering_amount} ml")
+            ser.write(f"{watering_amount}\n".encode())
+        else:
+            print("No watering needed.")
+            ser.write(b"No watering needed\n")  # Send message to Arduino
+        
+        time.sleep(1)
+    
+    time.sleep(0.1)
