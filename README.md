@@ -3,4 +3,13 @@
 
 <h2>Project Overview</h2>
 <p>
-
+<h2>Features</h2>
+<p>
+<h2>System architecture</h2>
+<p>
+<h2>Hardware requirements</h2>
+<p>
+<h2>Software requirementsh2>
+<p>
+<h2>Installation and setup</h2>
+<p>
